@@ -5,13 +5,13 @@ export const products: Product[] = [
         id: 1,
         name: 'Teclado mecanico Asus RGB',
         description: 'Algun teclado mecanico con luces RGB cherry red',
-        price: 1000
+        price: 1000.50
     },
     {
         id: 2,
         name: 'Samsung Smart TV LED 75',
         description: 'Algun LCD excelente OLED',
-        price: 2000
+        price: 2000.50
     },
     {
         id: 3,

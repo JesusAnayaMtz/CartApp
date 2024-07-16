@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Product } from '../../models/product';
 import { ProductoCardComponent } from '../producto-card/producto-card.component';
 
@@ -12,4 +12,13 @@ import { ProductoCardComponent } from '../producto-card/producto-card.component'
 export class CatalogoComponent {
 
   @Input() productos : Product[] = [];
+
+
+  //este mismo se le va a pasar al padre que es el cartapp
+  @Output() productEventEmmiter: EventEmitter<Product> = new EventEmitter();
+
+//le pasamos el evento que viene del hijo (productcartcomponent)
+  onAddCart(product: Product){
+    this.productEventEmmiter.emit(product);
+  }
 }
