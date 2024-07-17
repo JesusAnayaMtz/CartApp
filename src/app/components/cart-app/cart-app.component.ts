@@ -6,11 +6,12 @@ import { CartComponent } from '../cart/cart.component';
 import { CartItem } from '../../models/cartItem';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../navbar/navbar.component';
+import { CartModalComponent } from '../cart-modal/cart-modal.component';
 
 @Component({
   selector: 'app-cart-app',
   standalone: true,
-  imports: [CatalogoComponent, CartComponent, NavbarComponent],
+  imports: [CatalogoComponent, CartModalComponent, NavbarComponent],
   templateUrl: './cart-app.component.html',
   styleUrl: './cart-app.component.css'
 })
@@ -66,7 +67,6 @@ export class CartAppComponent implements OnInit{
       this.items = [... this.items, {product: {... product}, quantity: 1}];
     } 
     this.calculaTotal();
-    this.totalProductosCart();
     this.saveSession();
   }
 
@@ -81,7 +81,7 @@ export class CartAppComponent implements OnInit{
   calculaTotal(): void {
     //hacemos el calculo con reduce el cual la primer varable almacenara el total acumulado y la segunda variable es el item que inicializara en 0
     this.total = this.items.reduce((acumuladorTotal, item) => acumuladorTotal + item.quantity * item.product.price, 0);
-    this.totalProductosCart();
+    this.nProducts = this.items.reduce((totalItems, item) => totalItems + item.quantity, 0);
   }
 
   saveSession():void {
@@ -91,11 +91,11 @@ export class CartAppComponent implements OnInit{
 
 //metodo para devolver a true showcart
 openCart(): void{
-      this.showCart = !this.showCart;
+  this.showCart = !this.showCart;
 }
 
-totalProductosCart(){
-  this.nProducts = this.items.reduce((totalItems, item) => totalItems + item.quantity, 0);
-}
+
+  
+
 
 }
