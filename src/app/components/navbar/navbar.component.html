@@ -10,10 +10,13 @@
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="#">Home</a>
           </li>
-            <li>
-                <button class="btn" (click)="openCart()" ><i class="bi bi-cart4 fs-5"></i> Carrito <span class="badge text-bg-light" *ngIf="items.length> 0" >{{nProducts}}</span></button>
-            </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" [routerLink]="['/catalogo']" [state]="{products: products}">Productos</a>
+          </li>
         </ul>
+      </div>
+      <div>
+        <button class="btn" (click)="openCart()" ><i class="bi bi-cart4 fs-5"></i> Carrito <span class="badge text-bg-light" *ngIf="items.length> 0" >{{numProducts}}</span></button>
       </div>
     </div>
   </nav>

@@ -1,12 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, input, Input, OnInit, Output } from '@angular/core';
 import { CartItem } from '../../models/cartItem';
 import { CommonModule } from '@angular/common';
-import { CartAppComponent } from '../cart-app/cart-app.component';
+import { RouterModule } from '@angular/router';
+import { Product } from '../../models/product';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, CartAppComponent],
+  imports: [CommonModule, RouterModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
@@ -15,16 +16,16 @@ export class NavbarComponent {
 
   @Input() items: CartItem[] = [];
 
-  @Output() openEventEmmiter = new EventEmitter();
+  @Input() numProducts: number = 0;
 
-  nProducts: number = 0;
+  @Input() products: Product[] = [];
+
+  @Output() openEventEmmiter = new EventEmitter();
 
   openCart(): void {
     this.openEventEmmiter.emit();
   }
 
-  totalProductosCart(){
-    this.nProducts = this.items.reduce((totalItems, item) => totalItems + item.quantity, 0);
-  }
+  @Input() total: number = 0;
 
 }

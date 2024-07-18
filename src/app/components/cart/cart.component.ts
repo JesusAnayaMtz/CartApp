@@ -1,5 +1,9 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { CartItem } from '../../models/cartItem';
+import { Router, RouterModule } from '@angular/router';
+import { NavbarComponent } from "../navbar/navbar.component";
+import { CartModalComponent } from "../cart-modal/cart-modal.component";
+import { SharingDataService } from '../../services/sharing-data.service';
 
 @Component({
   selector: 'app-cart',
@@ -8,7 +12,12 @@ import { CartItem } from '../../models/cartItem';
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.css'
 })
-export class CartComponent {
+export class CartComponent  {
+
+  constructor(private sharingDataService: SharingDataService, private router: Router){
+    this.items = this.router.getCurrentNavigation()?.extras.state!['items'];
+    this.total = this.router.getCurrentNavigation()?.extras.state!['totaln'];
+  }
   
   //creamos un arreglo de tipo cartiem el cual contiene catidad y producto
   @Input() items: CartItem[] = [];
@@ -17,7 +26,6 @@ export class CartComponent {
   @Output() idProductEventEmmiter = new EventEmitter();
 
   onDeleteProductCart(id: number){
-    this.idProductEventEmmiter.emit(id);
+    this.sharingDataService.idProductEventEmmiter.emit(id);
   }
-
 }
