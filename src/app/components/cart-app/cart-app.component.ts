@@ -7,7 +7,7 @@ import { CartItem } from '../../models/cartItem';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { CartModalComponent } from '../cart-modal/cart-modal.component';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { SharingDataService } from '../../services/sharing-data.service';
 
 @Component({
@@ -32,11 +32,18 @@ export class CartAppComponent implements OnInit{
   //bandera para poder mostrar y oculatar el carro de compras
   showCart: boolean = false;
 
+  //bandera para activar el delete en modal o cart
+  cartActive: number = 1;
+
+ 
+
 
   //inyectamos el service
   private productservice = inject(ProductService)
 
   private sharingDataService = inject(SharingDataService)
+
+  private router = inject(Router)
 
   
   ngOnInit(): void { 
@@ -84,8 +91,20 @@ export class CartAppComponent implements OnInit{
     this.items = this.items.filter(item => item.product.id !== id);
     this.calculaTotal();
     this.saveSession();
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() =>{
+      this.router.navigate(['/cart'], {
+        state: {items: this.items, totaln: this.total, cartActiveN: this.cartActive}
+      })
+    })
     })
     
+  }
+
+  onDeleteProductCartModal(id: number): void{
+      //validamos con filter regresamos todos los items que son diferentes del id y crea un nuevo arreglo con los elemento que sean diferentes al id
+    this.items = this.items.filter(item => item.product.id !== id);
+    this.calculaTotal();
+    this.saveSession();
   }
 
   //metodo que calcula el total
@@ -103,10 +122,11 @@ export class CartAppComponent implements OnInit{
 //metodo para devolver a true showcart
 openCart(): void{
   this.showCart = !this.showCart;
+  this.cartActive = 0;
 }
-
-
   
-
+comprar(cartActive : number): void{
+  this.cartActive = 0;
+}
 
 }

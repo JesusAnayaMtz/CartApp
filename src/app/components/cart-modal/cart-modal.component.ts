@@ -15,17 +15,28 @@ export class CartModalComponent {
 
   @Input() items: CartItem[] = [];
   @Input() totaln: number = 0;
+
+  @Input() cartActiveN: number = 1;
   
 
-  @Output() idProductEventEmmiter = new EventEmitter();
+  @Output() idProductEventEmmiterModal = new EventEmitter();
 
-  onDeleteProductCart(id: number){
-    this.idProductEventEmmiter.emit(id);
+  onDeleteProductCartModal(id: number){
+    this.idProductEventEmmiterModal.emit(id);
   }
 
-    @Output() openEventEmmiter = new EventEmitter();
+  @Output() openEventEmmiter = new EventEmitter();
 
-  openCart(): void {
+  openCart() {
     this.openEventEmmiter.emit();
   }
+
+  @Output() cartActiveEventEmmiter = new EventEmitter();
+
+  comprar(cartActive: number){
+    this.cartActiveEventEmmiter.emit();
+  }
+
+  
+
 }

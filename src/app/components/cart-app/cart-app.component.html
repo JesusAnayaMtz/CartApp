@@ -13,7 +13,7 @@
             } -->
         <!--</div>-->
 @if (showCart) {
-    <app-cart-modal [items]="items" (idProductEventEmmiter)="onDeleteProductCart()" (openEventEmmiter)="openCart()" [totaln]="total"></app-cart-modal>
+    <app-cart-modal [items]="items" [cartActiveN]="cartActive" [cartActiveN]="cartActive" (idProductEventEmmiterModal)="onDeleteProductCartModal($event)" (openEventEmmiter)="openCart()" [totaln]="total"></app-cart-modal>
     }
     <router-outlet></router-outlet>
 </div>
