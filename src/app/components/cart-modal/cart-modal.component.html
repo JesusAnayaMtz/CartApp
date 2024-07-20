@@ -8,14 +8,14 @@
                 </div>
                 <div class="modal-body">
                     @if (items.length > 0) {
-                        <app-cart [items]="items" [total]="totaln" (idProductEventEmmiterModal)="onDeleteProductCartModal($event)"> ></app-cart>
+                        <app-cart [items]="items" [total]="totaln" (idProductEventEmmiterModal)="onDeleteProductCart()"> ></app-cart>
                     } @else {
                         <div class="alert alert-warning">No hay elementos en el carro</div>
                     }
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="openCart()">Cerrar</button>
-                    <button type="button" class="btn btn-primary" [routerLink]="['/cart']" [state]="{items:items, totaln: totaln, cartActiveN:cartActiveN}" (click)="openCart()">Comprar</button>
+                    <button type="button" class="btn btn-primary" [routerLink]="['/cart']" [state]="{items:items, totaln: totaln}" (click)="openCart()">Comprar</button>
                 </div> 
             </div>
         </div>

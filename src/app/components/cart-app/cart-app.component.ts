@@ -9,6 +9,8 @@ import { NavbarComponent } from '../navbar/navbar.component';
 import { CartModalComponent } from '../cart-modal/cart-modal.component';
 import { Router, RouterOutlet } from '@angular/router';
 import { SharingDataService } from '../../services/sharing-data.service';
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-cart-app',
@@ -20,7 +22,7 @@ import { SharingDataService } from '../../services/sharing-data.service';
 export class CartAppComponent implements OnInit{
 
   //creamos una variable la cual sera un arreglo de productos
-  productos: Product[] = [];
+ // productos: Product[] = [];
   
   nProducts: number = 0;
 
@@ -31,12 +33,7 @@ export class CartAppComponent implements OnInit{
 
   //bandera para poder mostrar y oculatar el carro de compras
   showCart: boolean = false;
-
-  //bandera para activar el delete en modal o cart
-  cartActive: number = 1;
-
  
-
 
   //inyectamos el service
   private productservice = inject(ProductService)
@@ -48,7 +45,7 @@ export class CartAppComponent implements OnInit{
   
   ngOnInit(): void { 
     //le pasamos a la varable productos todos con el service y el metodod findall
-    this.productos = this.productservice.findAll();
+   // this.productos = this.productservice.findAll();
     //aqui recuperamos los datos del sessionstorage si existen los obtiene si no se coloca un arreglo vacio
     this.items = JSON.parse(sessionStorage.getItem('cart')!) || [];
     this.calculaTotal();
@@ -82,30 +79,53 @@ export class CartAppComponent implements OnInit{
     } 
     this.calculaTotal();
     this.saveSession();
+    Swal.fire({
+      title: "Agregado",
+      text: "Producto Agregado Al Carro",
+      icon: "success",
+    });
     })
   }
 
   onDeleteProductCart(): void{
     this.sharingDataService.idProductEventEmmiter.subscribe(id => {
       //validamos con filter regresamos todos los items que son diferentes del id y crea un nuevo arreglo con los elemento que sean diferentes al id
-    this.items = this.items.filter(item => item.product.id !== id);
+      Swal.fire({
+        title: "Esta Seguro Que Desea Eliminar?",
+        text: "Cuidado esto es irreversible",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si, Eliminar!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.items = this.items.filter(item => item.product.id !== id);
     this.calculaTotal();
     this.saveSession();
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() =>{
       this.router.navigate(['/cart'], {
-        state: {items: this.items, totaln: this.total, cartActiveN: this.cartActive}
+        state: {items: this.items, totaln: this.total}
       })
     })
+          Swal.fire({
+            title: "Eliminado!",
+            text: "El producto ah sido eliminado",
+            icon: "success"
+          });
+        }
+      });
+  
     })
     
   }
 
-  onDeleteProductCartModal(id: number): void{
+ /* onDeleteProductCartModal(id: number): void{
       //validamos con filter regresamos todos los items que son diferentes del id y crea un nuevo arreglo con los elemento que sean diferentes al id
     this.items = this.items.filter(item => item.product.id !== id);
     this.calculaTotal();
     this.saveSession();
-  }
+  } */
 
   //metodo que calcula el total
   calculaTotal(): void {
@@ -122,11 +142,8 @@ export class CartAppComponent implements OnInit{
 //metodo para devolver a true showcart
 openCart(): void{
   this.showCart = !this.showCart;
-  this.cartActive = 0;
 }
   
-comprar(cartActive : number): void{
-  this.cartActive = 0;
-}
+
 
 }

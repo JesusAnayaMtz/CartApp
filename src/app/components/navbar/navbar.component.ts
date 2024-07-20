@@ -18,7 +18,7 @@ export class NavbarComponent {
 
   @Input() numProducts: number = 0;
 
-  @Input() products: Product[] = [];
+ // @Input() products: Product[] = [];
 
   @Output() openEventEmmiter = new EventEmitter();
 

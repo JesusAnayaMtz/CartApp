@@ -26,11 +26,8 @@
                         <td>{{item.product.price}}</td>
                         <td>{{item.quantity}}</td>
                         <td>${{item.product.price * item.quantity}}</td>
-                        @if (cartActiveN == 1) {
-                            <td><button class="btn btn-danger btn-sm" (click)="onDeleteProductCartModal(item.product.id)">eliminar</button></td>
-                        } @else {
-                            <td><button class="btn btn-danger btn-sm" (click)="onDeleteProductCart(item.product.id)">eliminar</button></td>
-                        }
+                        <td><button class="btn btn-danger btn-sm" (click)="onDeleteProductCart(item.product.id)">eliminar</button></td>
+
                     </tr>
                 }
             </tbody>

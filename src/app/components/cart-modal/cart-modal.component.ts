@@ -15,14 +15,12 @@ export class CartModalComponent {
 
   @Input() items: CartItem[] = [];
   @Input() totaln: number = 0;
-
-  @Input() cartActiveN: number = 1;
   
 
   @Output() idProductEventEmmiterModal = new EventEmitter();
 
-  onDeleteProductCartModal(id: number){
-    this.idProductEventEmmiterModal.emit(id);
+  onDeleteProductCart(){
+    this.idProductEventEmmiterModal.emit();
   }
 
   @Output() openEventEmmiter = new EventEmitter();
@@ -31,12 +29,11 @@ export class CartModalComponent {
     this.openEventEmmiter.emit();
   }
 
-  @Output() cartActiveEventEmmiter = new EventEmitter();
 
-  comprar(cartActive: number){
-    this.cartActiveEventEmmiter.emit();
+  @Output() comprarEventEmmiter = new EventEmitter();
+
+  comprar(){
+    this.comprarEventEmmiter.emit();
   }
-
-  
 
 }

@@ -20,8 +20,6 @@ export class CartComponent  {
     this.total = this.router.getCurrentNavigation()?.extras.state!['totaln'];
   }
 
-   @Input() cartActiveN: number = 1;
-
   //creamos un arreglo de tipo cartiem el cual contiene catidad y producto
   @Input() items: CartItem[] = [];
   @Input() total = 0;
@@ -32,11 +30,6 @@ export class CartComponent  {
     this.sharingDataService.idProductEventEmmiter.emit(id);
   }
 
-  @Output() idProductEventEmmiterModal = new EventEmitter();
-
-  onDeleteProductCartModal(id: number): void{
-    this.idProductEventEmmiterModal.emit(id);
-  }
 
 
 

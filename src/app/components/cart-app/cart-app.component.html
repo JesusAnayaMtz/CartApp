@@ -1,4 +1,4 @@
-<app-navbar [items]="items" (openEventEmmiter)="openCart()" [numProducts]="nProducts" [products]="productos"></app-navbar>
+<app-navbar [items]="items" (openEventEmmiter)="openCart()" [numProducts]="nProducts" ></app-navbar>
 <div class="container my-4">
 <!-- <h2>Catalogo de productos</h2> -->
 <!--<div class="row">-->
@@ -13,7 +13,7 @@
             } -->
         <!--</div>-->
 @if (showCart) {
-    <app-cart-modal [items]="items" [cartActiveN]="cartActive" [cartActiveN]="cartActive" (idProductEventEmmiterModal)="onDeleteProductCartModal($event)" (openEventEmmiter)="openCart()" [totaln]="total"></app-cart-modal>
+    <app-cart-modal [items]="items" (idProductEventEmmiterModal)="onDeleteProductCart()" (openEventEmmiter)="openCart()" [totaln]="total"></app-cart-modal>
     }
     <router-outlet></router-outlet>
 </div>
