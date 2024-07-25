@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, inject, OnInit, Output } from '@angular/core';
 import { ProductService } from '../../services/product.service';
 import { Product } from '../../models/product';
 import { CatalogoComponent } from "../catalogo/catalogo.component";
@@ -10,6 +10,9 @@ import { CartModalComponent } from '../cart-modal/cart-modal.component';
 import { Router, RouterOutlet } from '@angular/router';
 import { SharingDataService } from '../../services/sharing-data.service';
 import Swal from 'sweetalert2';
+import { Store } from '@ngrx/store';
+import { itemsState } from '../../store/items.reducer';
+import { add, remove, total } from '../../store/items.actions';
 
 
 @Component({
@@ -38,17 +41,30 @@ export class CartAppComponent implements OnInit{
   //inyectamos el service
   private productservice = inject(ProductService)
 
-  private sharingDataService = inject(SharingDataService)
+  constructor( private sharingDataService: SharingDataService){
+    this.store.select('items').subscribe(state => {
+      //datos para componentes iniciales en el sharingdataservice los cuales los obtenemos del store
+      this.items = state.items;
+      this.total = state.total;
+      this.nProducts = state.nProducts;
+      this.saveSession();
+    })
+  }
 
   private router = inject(Router)
+
+  private store = inject(Store<{items: itemsState}>)
+
+
 
   
   ngOnInit(): void { 
     //le pasamos a la varable productos todos con el service y el metodod findall
    // this.productos = this.productservice.findAll();
     //aqui recuperamos los datos del sessionstorage si existen los obtiene si no se coloca un arreglo vacio
-    this.items = JSON.parse(sessionStorage.getItem('cart')!) || [];
-    this.calculaTotal();
+    //this.items = JSON.parse(sessionStorage.getItem('cart')!) || [];
+    //this.calculaTotal();
+
     this.onDeleteProductCart();
     this.onAddCart();
   }
@@ -57,28 +73,12 @@ export class CartAppComponent implements OnInit{
   onAddCart(): void{
     this.sharingDataService.productEventEmmiter.subscribe(product => {
       //recorremos los items busvcando alguno que sea igual a uno existente
-    const hasItem = this.items.find(item => {
-      return item.product.id === product.id;
-    })
-    //si econtramos uno entra al if y si es true va actualizar
-    if(hasItem){
-      //con el siguiente if validamos que si el id es igual a la cantidad le agregue 1 mas
-      this.items = this.items.map(item => {
-        if(item.product.id === product.id){
-          return { 
-            //expacimos el iten y se agrega a quatity 1
-            ... item,
-            quantity: item.quantity + 1
-          }
-        }
-        return item;
-      })
-    }else {
-      //si no encontra uno igual se va a else y agrega el producto diferente al carro
-      this.items = [... this.items, {product: {... product}, quantity: 1}];
-    } 
-    this.calculaTotal();
-    this.saveSession();
+
+      //se agrega el reducer que viene del action
+    this.store.dispatch(add({product: product}))
+    this.store.dispatch(total())
+   // this.calculaTotal();
+    //this.saveSession();
     Swal.fire({
       title: "Agregado",
       text: "Producto Agregado Al Carro",
@@ -100,9 +100,12 @@ export class CartAppComponent implements OnInit{
         confirmButtonText: "Si, Eliminar!"
       }).then((result) => {
         if (result.isConfirmed) {
-          this.items = this.items.filter(item => item.product.id !== id);
-    this.calculaTotal();
-    this.saveSession();
+
+          
+   // this.calculaTotal();
+   this.store.dispatch(remove({id}));
+   this.store.dispatch(total())
+    //this.saveSession();
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() =>{
       this.router.navigate(['/cart'], {
         state: {items: this.items, totaln: this.total}
@@ -115,9 +118,7 @@ export class CartAppComponent implements OnInit{
           });
         }
       });
-  
-    })
-    
+    })  
   }
 
  /* onDeleteProductCartModal(id: number): void{
@@ -128,12 +129,12 @@ export class CartAppComponent implements OnInit{
   } */
 
   //metodo que calcula el total
-  calculaTotal(): void {
+  /* calculaTotal(): void {
     //hacemos el calculo con reduce el cual la primer varable almacenara el total acumulado y la segunda variable es el item que inicializara en 0
     this.total = this.items.reduce((acumuladorTotal, item) => acumuladorTotal + item.quantity * item.product.price, 0);
     this.nProducts = this.items.reduce((totalItems, item) => totalItems + item.quantity, 0);
   }
-
+ */
   saveSession():void {
   //con JSON.stringfy convertimos nuestro objeto a string y con sessionsatorage, setitem pasamos nuestro objeto para que se guarde localmente
   sessionStorage.setItem('cart', JSON.stringify(this.items));
